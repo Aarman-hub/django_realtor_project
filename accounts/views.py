@@ -3,10 +3,15 @@ from django.contrib import messages, auth
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 # Create your views here.
+from contacts.models import Contact
 
 
 def dashboard(request):
-    return render(request, 'accounts/dashboard.html')
+    contacts = Contact.objects.order_by('-Contact_date').filter(user_id=request.user.id)
+    context = {
+        'contacts':contacts,
+    }
+    return render(request, 'accounts/dashboard.html', context)
 
 def register(request):
     if request.method == 'POST':
